@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pet the Cat</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  #catImage {
+    width: 300px;
+    height: auto;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+<h1>Pet the Cat</h1>
+<img id="catImage" src="C:\Users\SuckT\Documents\petcatweb\cat-lazy.gif" alt="Lazy Cat">
+<br>
+<div id="volume"></div>
+
+<script>
+var volume = 0; // Initial volume
+var audio = new Audio('C:\\Users\\SuckT\\Documents\\petcatweb\\purring-cat_01-63402.mp3');
+var touchTimeout;
+var decreaseInterval;
+
+function decreaseVolume() {
+  if (volume > 0.1) {
+    volume -= 0.1;
+    audio.volume = volume;
+    document.getElementById('volume').textContent = 'Volume: ' + Math.round(volume * 100) + '%';
+  }
+  if (volume == 0.1) {
+    audio.pause(); // Pause audio if it's muted
+  }
+}
+
+document.getElementById('catImage').addEventListener('touchstart', function() {
+  clearInterval(decreaseInterval);
+  clearTimeout(touchTimeout);
+  if (volume == 1) {
+    // Maximum volume reached, stop increasing
+    return;
+  }
+  audio.volume = volume;
+  audio.play();
+  volume += 0.1; // Increase volume by 0.1 on each touch
+  document.getElementById('volume').textContent = 'Volume: ' + Math.round(volume * 100) + '%';
+});
+
+document.getElementById('catImage').addEventListener('touchend', function() {
+  touchTimeout = setTimeout(function() {
+    decreaseInterval = setInterval(decreaseVolume, 2000);
+  }, 2000);
+});
+
+// Start decreasing volume if not touched
+decreaseInterval = setInterval(decreaseVolume, 2000);
+</script>
+</body>
+</html>
